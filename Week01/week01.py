@@ -19,7 +19,7 @@ def export_data_csv():
     df.to_csv("data.csv", index = False, encoding = "utf-8")
     print("Exported file successfully")
 
-def load_csv(path = "./data.csv"):
+def load_csv(path = "./data/data.csv"):
     try:
         df = pd.read_csv(path, delimiter= ",")
         df.set_index("ID", inplace = True)
@@ -118,7 +118,7 @@ def preprocess_data1():
     print("="*91)
     print("\n\n")
 
-def load_data(path = "./arrhythmia.data"):
+def load_data(path = "./data/arrhythmia.data"):
     try:
         df = pd.read_csv(path, delimiter= ",", header = None, na_values = ['?'])
         print("Loaded arrhythmia.data successfully\n")
@@ -195,7 +195,7 @@ def preprocess_data2():
     print("="*153)
     print("\n\n")
 
-def load_musk_dataset(path = "./clean2.data"):
+def load_musk_dataset(path = "./data/clean2.data"):
     try:
         df = pd.read_csv(path, delimiter = ",", header = None)
         print("Loaded Musk data successfully")
