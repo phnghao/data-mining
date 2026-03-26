@@ -1,0 +1,6 @@
+services:
+  lab:
+    build: .
+    image: lab01
+    volumes: 
+      - ./data:/app/data
