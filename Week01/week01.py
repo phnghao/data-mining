@@ -4,6 +4,7 @@ from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder, KBinsDiscretizer
 from sklearn.decomposition import PCA
 
+
 def export_data_csv():
     data = {
         "ID": range(1, 13),
@@ -268,6 +269,8 @@ if __name__ == "__main__":
     # Export a csv file
     # export_data_csv()
 
+    import warnings
+    warnings.filterwarnings("ignore")
     # Part 1.
     preprocess_data1()
 
