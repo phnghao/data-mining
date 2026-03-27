@@ -57,7 +57,11 @@ def preprocess_data1():
     print()
 
     print("## 4. Encoding categorical data with get_dummies")
-    df = pd.get_dummies(df, columns = ["Gender", "Department"], dtype = "int")
+    df = pd.get_dummies(
+            df,
+            columns = ["Gender", "Department"],
+            dtype = "int"
+        )
     print("After using get_dummies()\n", df)
     print()
 
