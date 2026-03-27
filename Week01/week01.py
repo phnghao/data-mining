@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, KBinsDiscretizer
 from sklearn.decomposition import PCA
 
 def export_data_csv():
@@ -104,7 +104,7 @@ def preprocess_data1():
     print("Scaling data:\n", minmax_df)
     print()
 
-    print("## 8. Digitizing data")
+    print("## 8. Discretizing data")
     std_df = pd.DataFrame(standard_df.copy(), index = df.index)
     print("### 1. 10 equi-width ranges with first column of standard_df")
     df2 = std_df.copy()
@@ -114,7 +114,7 @@ def preprocess_data1():
     print("### 2. 10 equi-depth ranges with first column of standard_df")
     df3 = std_df.copy()
     df3["equi-depth_column0"] = pd.qcut(df3.iloc[:, 0], q = 10)
-    print("Digitizing column 0 using 10 equi-depth range:\n", df3)
+    print("Discretizing column 0 using 10 equi-depth range:\n", df3)
     print("="*91)
     print("\n\n")
 
@@ -179,19 +179,14 @@ def preprocess_data2():
     print("Scaling data:\n", minmax_df.head())
     print()
 
-    print("## 6. Digitizing data")
-    num_cols = df.columns[:-1]
-    df_discrete_width = standard_df.copy()
-    df_discrete_depth = standard_df.copy()
-    for col in num_cols:
-        # 10 equi-with ranges
-        df_discrete_width[f"width_{col}"] = pd.cut(standard_df[col], bins=10)
-        # 10 equi-with ranges
-        df_discrete_depth[f'depth_{col}'] = pd.qcut(standard_df[col], q=10, duplicates="drop")
-    print("10 equi-width:")
-    print(df_discrete_width.head())
-    print("10 equi-depth:")
-    print(df_discrete_depth)
+    print("## 6. Discretizing data")
+    cols_all_zeros = standard_df.columns[(standard_df == 0).all()]
+    standard_df.drop(labels = cols_all_zeros, inplace= True, axis = 1)
+    selector = standard_df.nunique() > 1
+    train_df = standard_df.loc[:, selector]
+    est = KBinsDiscretizer(n_bins=10, encode="ordinal", strategy = "quantile", subsample=None)
+    data_discrete = est.fit_transform(train_df)
+    print(data_discrete)
     print("="*153)
     print("\n\n")
 
@@ -249,18 +244,14 @@ def preprocess_data3():
     print("Scaling data:\n", minmax_df.head())
     print()
 
-    print("## 6. Digitizing data")
-    df_discrete_width = standard_df.copy()
-    df_discrete_depth = standard_df.copy()
-    for col in X.columns:
-        # 10 equi-with ranges
-        df_discrete_width[f"width_{col}"] = pd.cut(standard_df[col], bins=10)
-        # 10 equi-with ranges
-        df_discrete_depth[f'depth_{col}'] = pd.qcut(standard_df[col], q=10, duplicates="drop")
-    print("10 equi-width:")
-    print(df_discrete_width.head())
-    print("10 equi-depth:")
-    print(df_discrete_depth.head())
+    print("## 6. Discretizing data")
+    cols_all_zeros = standard_df.columns[(standard_df == 0).all()]
+    standard_df.drop(labels = cols_all_zeros, inplace= True, axis = 1)
+    selector = standard_df.nunique() > 1
+    train_df = standard_df.loc[:, selector]
+    est = KBinsDiscretizer(n_bins=10, encode="ordinal", strategy = "quantile", subsample=None)
+    data_discrete = est.fit_transform(train_df)
+    print(data_discrete)
 
     print("## 7. Applying the PCA Algorithm")
     pca = PCA()
