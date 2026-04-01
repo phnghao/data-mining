@@ -1,0 +1,7 @@
+services:
+  lab:
+    build: .
+    image: lab01
+    container_name: lab02
+    volumes: 
+      - ./data:/app/data

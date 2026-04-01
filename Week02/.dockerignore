@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.git
+Week02/data/ionosphere.data
+Week02/data/kddcup.data.corrected
