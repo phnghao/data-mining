@@ -102,7 +102,7 @@ def overlap(df, batch_size = None):
     matches = (subset[:, None, :] == subset[None, :, :])
     return np.mean(matches, axis = 2)
     
-class TestOverlapSimilarity(unittest.TestCase):
+class TestOverlap(unittest.TestCase):
     def setUp(self):
         self.data = pd.DataFrame([
             ['tcp', 'http', 'SF'],
