@@ -1,3 +1,5 @@
+import unittest
+
 def edit_distance(source_string, target_string):
     m = len(source_string)
     n = len(target_string)
@@ -53,6 +55,27 @@ def edit_distance(source_string, target_string):
     operations_performed.reverse()
     return [f[m][n], operations_performed]
 
+class TestEditDistance(unittest.TestCase):
+    
+    def test_identical_strings(self):
+        dist, ops = edit_distance("hello", "hello")
+        self.assertEqual(dist, 0)
+        self.assertEqual(len(ops), 0)
+
+    def test_replacement(self):
+        dist, ops = edit_distance("a", "b")
+        self.assertEqual(dist, 2)
+        self.assertEqual(ops[0][0], "Replacement")
+
+    def test_insertion_deletion(self):
+        dist, ops = edit_distance("abc", "abcd")
+        self.assertEqual(dist, 1)
+        self.assertEqual(ops[0][0], "Insert")
+
+    def test_complex_case(self):
+        dist, ops = edit_distance("kitten", "sitting")
+        self.assertEqual(dist, 5)
+
 def lcs(string1, string2):
     m = len(string1)
     n = len(string2)
@@ -85,6 +108,23 @@ def lcs(string1, string2):
     operations_performed.reverse()
     return [f[m][n], operations_performed]
 
+class TestLCS(unittest.TestCase):
+
+    def test_common_subsequence(self):
+        length, seq = lcs("ABCBDAB", "BDCABA")
+        self.assertEqual(length, 4)
+        self.assertEqual(len(seq), 4)
+
+    def test_no_common(self):
+        length, seq = lcs("abc", "def")
+        self.assertEqual(length, 0)
+        self.assertEqual(seq, [])
+
+    def test_with_empty_string(self):
+        length, seq = lcs("", "python")
+        self.assertEqual(length, 0)
+        self.assertEqual(seq, [])
+
 def dtw(series1, series2):
     INF = float("inf")
     m = len(series1)
@@ -100,7 +140,7 @@ def dtw(series1, series2):
 
     for i in range(1, m + 1):
         for j in range(1, n + 1):
-            d = abs(series1[i-1] - series2[j-1])
+            d = float(abs(series1[i-1] - series2[j-1]))
             f[i][j] = min(f[i-1][j-1], f[i-1][j], f[i][j-1]) + d
 
     operations_performed = []
@@ -120,8 +160,37 @@ def dtw(series1, series2):
         else:
             j -=1
 
+    while i > 0:
+        operations_performed.append(f[i][0])
+        i -= 1
+    
+    while j > 0:
+        operations_performed.append(f[0][j])
+        j -= 1
+
     operations_performed.reverse()
     return [f[m][n], operations_performed]
+
+class TestDTW(unittest.TestCase):
+
+    def test_exact_match(self):
+        s1 = [1.0, 2.0, 3.0]
+        s2 = [1.0, 2.0, 3.0]
+        dist, path = dtw(s1, s2)
+        self.assertEqual(dist, 0.0)
+
+    def test_warping_capability(self):
+        s1 = [1, 2, 3]
+        s2 = [1, 1, 2, 2, 3, 3]
+        dist, path = dtw(s1, s2)
+        self.assertEqual(dist, 0.0)
+
+    def test_different_lengths(self):
+        s1 = [1, 5, 8]
+        s2 = [1, 9]
+        dist, path = dtw(s1, s2)
+        self.assertIsInstance(dist, float)
+        self.assertTrue(len(path) > 0)
  
 def Part1():
     print("# Part 1:")
@@ -185,6 +254,7 @@ def Part3():
     print()
 
 def main():
+    unittest.main(argv = [''], verbosity = 2, exit = False)
     Part1()
     Part2()
     Part3()
