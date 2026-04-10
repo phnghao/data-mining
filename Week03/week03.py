@@ -227,7 +227,7 @@ def Part1():
     print()
 
 def Part2():
-    print("# Part 2")
+    print("# Part 2:")
     print("Enter the first string")
     string1 = input().strip()
     print("Enter the second string")
@@ -239,7 +239,7 @@ def Part2():
     print()
    
 def Part3():
-    print("# Part 3")
+    print("# Part 3:")
     print("Enter the first series")
     line1 = input()
     series1 = [float(x) for x in line1.split()]
